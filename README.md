@@ -8,7 +8,8 @@ Nama anggota kelompok:
 6. Tiffany Lindy Adisuryo (2206025136)
 
 Selamat datang di TBRead! 📖📚📑
-Disini semua buku tersedia dari A sampai Z. Kamu dapat meminjam buku atau sekedar membaca buku yang ada. Ketika bingung mau baca buku apa, tinggal lihat buku favorit para pembaca biar ga ketinggalan. Atau malah sebaliknya, banyak sekali buku yang kamu ingin baca? Bisa diatasi, taruh buku tersebut pada TBR atau To Be Read, sehingga setelah menyelesaikan satu buku kamu tidak lupa untuk check out buku yang menarik lainnya. Kamu mau publish bukumu? Tentu saja bisa! Jadi, buku apa yang kamu baca hari ini?
+
+Disini semua buku tersedia dari A sampai Z. Kamu dapat membaca buku yang ada. Ketika bingung mau baca buku apa, tinggal lihat buku favorit para pembaca biar ga ketinggalan. Atau malah sebaliknya, banyak sekali buku yang kamu ingin baca? Bisa diatasi, taruh buku tersebut pada TBR atau To Be Read, sehingga setelah menyelesaikan satu buku kamu tidak lupa untuk check out buku yang menarik lainnya. Kamu mau publish bukumu? Tentu saja bisa! Jadi, buku apa yang kamu baca hari ini?
 
 Modul yang akan diimplementasikan:
 - Book            : Model untuk mengatur buku, buku yang telah disimpan user
