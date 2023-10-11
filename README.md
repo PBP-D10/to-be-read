@@ -1,4 +1,4 @@
-﻿# TBRead - PBP D10
+# TBRead - PBP D10
 Nama anggota kelompok:
 1. Maurice Yang (2206816866)
 2. Sekar Gandes Dianti (2206082713)
@@ -21,3 +21,5 @@ Role:
 - Reader    : User biasa, bisa membaca buku dan menyimpan buku dalam list buku yang ingin dibaca kemudian hari
 - Publisher  : User yang bisa merilis dan mengubah buku
 - admin      : User yang membuat Publisher dan PublisherHouse baru
+
+Sumber dataset katalog buku: https://www.kaggle.com/datasets/arashnic/book-recommendation-dataset
