@@ -11,7 +11,7 @@
     {% for book in books %}
         <li class="rounded-md shadow bg-white relative">
           {% if user.is_authenticated %}
-            <button class="absolute top-2 right-2 text-black text-xl w-8 shadow backdrop-blur bg-opacity-60 aspect-square bg-white rounded-full">
+            <button class="absolute top-2 right-2 text-black text-xl w-8 shadow backdrop-blur bg-opacity-60 hover:bg-opacity-100 transition aspect-square bg-white rounded-full">
                 <i class="fa-regular fa-bookmark"></i>
             </button>
             {% endif %}
