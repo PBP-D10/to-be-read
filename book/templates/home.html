@@ -1,19 +1,28 @@
-{% extends 'base.html' %} {% load static %} {% block styles %}
+{% extends 'base.html' %} {% load static %} 
+{% block title %} Home | TBRead {% endblock title %}
+{% block styles %}
 <link rel="stylesheet" href="{% static 'styles/home.css' %}" />
-{% endblock styles %} {% block content %}
+{% endblock styles %} 
+{% block content %}
 <main class="p-3 sm:p-5 flex flex-col">
-    <ul class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-5">
+    <h1 class="text-2xl sm:text-3xl font-semibold">Welcome to TBRead</h1>
+    <p class="text-lg sm:text-xl">Currently, we have {{ books|length }} book(s)</p>
+    <ul class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-5 mt-8">
     {% for book in books %}
-        <li class="p-3 rounded-md shadow bg-white">
-            {% comment %} {% if book.image_l %} {% endcomment %}
-            <img src="{{ book.image_l }}" alt="{{ book.title }}" class="w-full aspect-[4/6] object-cover bg-slate-300" />
-            {% comment %} {% else %}
-            <div class="w-full aspect-[4/6] object-cover " />
-            {% endif %} {% endcomment %}
+        <li class="rounded-md shadow bg-white relative">
+          {% if user.is_authenticated %}
+            <button class="absolute top-2 right-2 text-black text-xl w-8 shadow backdrop-blur bg-opacity-60 aspect-square bg-white rounded-full">
+                <i class="fa-regular fa-bookmark"></i>
+            </button>
+            {% endif %}
+            <img src="{{ book.image_l }}" alt="{{ book.title }}" class="rounded-t-md w-full aspect-[4/6] object-cover bg-slate-300" />
+            <div class="p-3 pt-1 border-t-2 border-t-slate-200">
             <h3 class="text-lg sm:text-xl font-semibold max-w-[20ch] overflow-hidden truncate">{{ book.title }}</h3>
             <small>{{ book.author}}</small>
+            </div>
         </li>
     {% endfor %}
     </ul>
 </main>
 {% endblock content %}
+{% block scripts %}{% endblock scripts %}
