@@ -18,7 +18,7 @@
           TBRead
         </a>
       </h1>
-      <ul class="items-center justify-start gap-5 text-lg fixed top-0 -left-full origin-left flex flex-col sm:flex-row sm:static transition-all duration-500 bg-white sm:bg-transparent w-full h-screen sm:w-max sm:h-min sm:gap-5 p-5 sm:p-0" id="navlinks">
+      <ul class="items-center justify-start gap-5 text-lg fixed top-0 -left-full origin-left flex flex-col sm:flex-row sm:static transition-all duration-500 bg-white sm:bg-transparent w-full h-screen sm:w-max sm:h-min sm:gap-3 p-5 sm:p-0" id="navlinks">
         <li class="sm:hidden">
           <h1 class="text-4xl font-semibold text-center text-sky-600">
             <a href="{% url 'book:Home' %}">
@@ -37,6 +37,7 @@
             />
           </form>
         </li>
+        <div class=" flex gap-3 justify-between items-center flex-col sm:flex-row">
           {% if user.is_authenticated %}
             <h1 class="text-lg font-medium">
               <i class="fa-solid fa-user mr-1"></i>
@@ -78,6 +79,7 @@
         navlinks.classList.add("-left-full");
         navlinks.classList.remove("left-0");
     });
+
 
     </script>
     {% block scripts %} {% endblock scripts %}
