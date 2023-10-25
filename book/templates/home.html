@@ -4,12 +4,23 @@
 <main class="p-3 sm:p-5 flex flex-col">
     <ul class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-5">
     {% for book in books %}
+<<<<<<< HEAD
         <li class="p-3 rounded-md shadow bg-white">
             {% comment %} {% if book.image_l %} {% endcomment %}
             <img src="{{ book.image_l }}" alt="{{ book.title }}" class="w-full aspect-[4/6] object-cover bg-slate-300" />
             {% comment %} {% else %}
             <div class="w-full aspect-[4/6] object-cover " />
             {% endif %} {% endcomment %}
+=======
+        <li class="rounded-md shadow bg-white relative">
+          {% if user.is_authenticated %}
+            <button class="absolute top-2 right-2 text-black text-xl w-8 shadow backdrop-blur bg-opacity-60 hover:bg-opacity-100 transition aspect-square bg-white rounded-full">
+                <i class="fa-regular fa-bookmark"></i>
+            </button>
+            {% endif %}
+            <img src="{{ book.image_l }}" alt="{{ book.title }}" class="rounded-t-md w-full aspect-[4/6] object-cover bg-slate-300" />
+            <div class="p-3 pt-1 border-t-2 border-t-slate-200">
+>>>>>>> f397953b273c82e3b1850d543b7badad185032fb
             <h3 class="text-lg sm:text-xl font-semibold max-w-[20ch] overflow-hidden truncate">{{ book.title }}</h3>
             <small>{{ book.author}}</small>
         </li>
