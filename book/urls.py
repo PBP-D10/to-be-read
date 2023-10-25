@@ -1,8 +1,9 @@
 from django.urls import path
-from book.views import get_books
+from . import views
 
 app_name = 'book'
 
 urlpatterns = [
-    path('', get_books, name='get_books')
+    # path('', get_books, name='get_books'),
+    path('', views.home_page, name='Home'),
 ]

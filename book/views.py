@@ -4,6 +4,9 @@ from django.core import serializers
 from book.models import Book
 
 # Create your views here.
-def get_books(request):
-    data = Book.objects.all()
-    return HttpResponse(serializers.serialize("json", data), content_type="application/json")
+def home_page(request):
+    books = Book.objects.all().order_by('-date_added')
+    context = {
+        'books': books,
+    }
+    return render(request, 'home.html', context=context)

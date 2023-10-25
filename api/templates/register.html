@@ -1,0 +1,43 @@
+{% extends 'unauthenticated_base.html' %} {% load static %}
+{% block title %}Register | TBRead{% endblock title %}
+{% block styles %}
+<link rel="stylesheet" href="{% static 'styles/home.css' %}" />
+{% endblock styles %} {% block content %}
+<main class="flex flex-col items-center justify-center h-screen bg-gradient-to-br from-sky-700 via-blue-800 to-purple-800">
+  <section class="w-[300px] shadow-md p-3 rounded-md bg-white">
+    <h1 class="text-3xl font-semibold text-center mb-5">Register</h1>
+    <form action="" method="post">
+      {% csrf_token %}
+      <div class="flex flex-col gap-3">
+        <ul class="flex flex-col gap-1">
+          {{ form.username.label_tag }}
+          {{ form.username }}
+          {{ form.password1.label_tag }}
+          {{ form.password1 }}
+          {{ form.password2.label_tag }}
+          {{ form.password2 }}
+        </ul>
+        <div class="flex flex-col gap-1">
+          <button
+            type="submit"
+            class="bg-sky-500 text-white rounded-md p-1.5 hover:bg-sky-600 transition-colors"
+          >
+            Register
+          </button>
+        </div>
+      </div>
+    </form>
+    {% if messages %}
+        <ul class="mt-5">
+            {% for message in messages %}
+                <li>{{ message }}</li>
+            {% endfor %}
+        </ul>
+    {% endif %}   
+    <div class="mt-5">
+      Have an account? Login
+      <a href="{% url 'Login' %}" class="text-sky-500 hover:underline transition">here</a>
+    </div>
+  </section>
+</main>
+{% endblock content %}
