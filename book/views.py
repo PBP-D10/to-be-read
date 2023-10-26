@@ -5,6 +5,11 @@ from book.models import Book
 from django.db.models import Q # untuk chain filter
 
 # Create your views here.
+def get_all_books(request):
+    books = Book.objects.all().order_by('-date_added')
+    books_json = serializers.serialize('json', books)
+    return HttpResponse(books_json, content_type='application/json')
+
 def home_page(request):
     keyword =  request.GET.get("search") or ""
     if keyword == "":
