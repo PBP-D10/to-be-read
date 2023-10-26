@@ -1,0 +1,12 @@
+{% extends 'base.html' %} {% load static %} 
+{% block title %} {{ book.title}} | TBRead {% endblock title %}
+{% block styles %}
+<link rel="stylesheet" href="{% static 'styles/home.css' %}" />
+{% endblock styles %} 
+{% block content %}
+<main class="p-3 sm:p-5 flex flex-col">
+    <h1 class="text-2xl sm:text-3xl font-semibold">{{ book.detail }}</h1>
+    
+</main>
+{% endblock content %}
+{% block scripts %}{% endblock scripts %}
