@@ -1,0 +1,67 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<style>
+    .submit-container {
+        display: flex;
+        justify-content: center; /* Horizontally center */
+        position: absolute;
+        width: 100%;
+        top: 0;
+    }
+
+    form {
+        margin-top: 60px; /* To ensure the form starts below the button */
+    }
+</style>
+
+<div class="submit-container">
+    <input type="submit" form="add-book-form" value="Submit" class="bg-blue-500 hover:bg-blue-600 text-white p-2 rounded cursor-pointer">
+</div>
+
+<h1 class="text-2xl font-bold mb-6">Add New Book</h1>
+
+<form id="add-book-form" method="post" class="space-y-6">
+    {% csrf_token %}
+
+    <div>
+        <label for="isbn" class="block text-sm font-medium text-gray-700">ISBN:</label>
+        <input type="text" name="isbn" id="isbn" required class="mt-1 p-2 w-full border rounded-md">
+    </div>
+
+    <div>
+        <label for="title" class="block text-sm font-medium text-gray-700">Title:</label>
+        <input type="text" name="title" id="title" required class="mt-1 p-2 w-full border rounded-md">
+    </div>
+
+    <div>
+        <label for="author" class="block text-sm font-medium text-gray-700">Author:</label>
+        <input type="text" name="author" id="author" required class="mt-1 p-2 w-full border rounded-md">
+    </div>
+
+    <div>
+        <label for="year" class="block text-sm font-medium text-gray-700">Year:</label>
+        <input type="number" name="year" id="year" class="mt-1 p-2 w-full border rounded-md">
+    </div>
+
+    <div>
+        <label for="publisher" class="block text-sm font-medium text-gray-700">Publisher:</label>
+        <input type="text" name="publisher" id="publisher" required class="mt-1 p-2 w-full border rounded-md">
+    </div>
+
+    <div>
+        <label for="image_s" class="block text-sm font-medium text-gray-700">Image Small:</label>
+        <input type="text" name="image_s" id="image_s" class="mt-1 p-2 w-full border rounded-md">
+    </div>
+
+    <div>
+        <label for="image_m" class="block text-sm font-medium text-gray-700">Image Medium:</label>
+        <input type="text" name="image_m" id="image_m" class="mt-1 p-2 w-full border rounded-md">
+    </div>
+
+    <div>
+        <label for="image_l" class="block text-sm font-medium text-gray-700">Image Large:</label>
+        <input type="text" name="image_l" id="image_l" class="mt-1 p-2 w-full border rounded-md">
+    </div>
+</form>
+{% endblock %}

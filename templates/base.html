@@ -9,6 +9,7 @@
     <link rel="stylesheet" href="{% static 'styles/global.css' %}" />
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css"/>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
     {% block styles %}{% endblock styles %}
   </head>
   <body class="">
@@ -46,6 +47,9 @@
           <a href="{% url 'Logout' %}" class="transition-colors hover:text-sky-500">
             <i class="fa-solid fa-arrow-right-from-bracket mr-1"></i>
             Logout
+          </a>
+          <a href="{% url 'publisher:create_book' %}" class="transition-colors hover:text-sky-500">
+            Add new Book
           </a>
           {% else %}
           <a href="{% url 'Login' %}" class="transition-colors hover:text-sky-500">
