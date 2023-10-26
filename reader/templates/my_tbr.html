@@ -8,16 +8,25 @@
     <h1 class="text-2xl sm:text-3xl font-semibold">Welcome to My TBRead</h1>
     {% if saved_books|length == 0 %}
         <p class="text-lg sm:text-xl">Currently, there are no books to be read 😣</p>
+        <form method="POST">
+            <label for="sortDropdown">Sorted by : </label>
+            <select id="sortDropdown" name="selected_value">
+                <option value="saved" selected>date saved</option>
+                <option value="date_added">date published</option>
+            </select>
+        </form>
     {% else %}
+        <form method="POST">
+            <label for="sortDropdown">Sorted by : </label>
+            <select id="sortDropdown" name="selected_value">
+                <option value="saved" selected>date saved</option>
+                <option value="date_added">date published</option>
+            </select>
+        </form>
         <p class="text-lg sm:text-xl">Currently, you have {{ saved_books|length }} book(s) to be read</p>
         <ul class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-5 mt-8">
         {% for book in saved_books %}
             <li class="rounded-md shadow bg-white relative">
-            {% if user.is_authenticated %}
-                <button class="absolute top-2 right-2 text-black text-xl w-8 shadow backdrop-blur bg-opacity-60 hover:bg-opacity-100 transition aspect-square bg-white rounded-full">
-                    <i class="fa-regular fa-bookmark"></i>
-                </button>
-                {% endif %}
                 <img src="{{ book.image_l }}" alt="{{ book.title }}" class="rounded-t-md w-full aspect-[4/6] object-cover bg-slate-300" />
                 <div class="p-3 pt-1 border-t-2 border-t-slate-200">
                 <h3 class="text-lg sm:text-xl font-semibold max-w-[20ch] overflow-hidden truncate">{{ book.title }}</h3>
@@ -26,8 +35,10 @@
             </li>
         {% endfor %}
     {% endif %}
-    
     </ul>
+    <a href="/" class="transition-colors hover:text-sky-500">
+        Look at more books
+    </a>
 </main>
 {% endblock content %}
 {% block scripts %}{% endblock scripts %}
