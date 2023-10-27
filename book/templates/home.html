@@ -4,7 +4,7 @@
 <main class="p-3 sm:p-5 flex flex-col">
     <h1 class="text-2xl sm:text-3xl font-semibold">Welcome to TBRead</h1>
     
-    {% if keyword %}
+    <!-- {% if keyword %}
         {% if books %}
             <p class="text-lg sm:text-xl">{{ books|length }} search results for `{{keyword}}`</p>
         {% else %}
@@ -13,8 +13,10 @@
     {% else %}
         <p class="text-lg sm:text-xl">Currently, we have {{ books|length }} book(s)</p>
         
-    {% endif %}
-    <ul class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-5 mt-8">
+    {% endif %} -->
+
+    <p class="text-lg sm:text-xl" id="jumlah_buku">tes</p>
+    <ul class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-5 mt-8" id="book_list">
         {% for book in books %}
         <li class="rounded-md shadow bg-white relative">
           {% if user.is_authenticated %}
@@ -33,3 +35,56 @@
     
 </main>
 {% endblock content %}
+{% block scripts %}
+<script>
+    async function get_books(keyword){
+        var formData = new FormData()
+        formData.append("keyword", keyword)
+        
+        return await fetch("{% url 'book:get_books_json' %}",{
+            method: "POST",
+            body: formData
+        }).then((res) => res.json())
+    }
+    async function refresh_books(){
+        console.log("refreshing")
+
+        
+        const keyword = document.getElementById("search").value
+
+        var books = await get_books(keyword)
+        console.log(books)
+
+        var HTMLString = ''
+
+        books.forEach((item, index) => {
+            HTMLString += '<li class="rounded-md shadow bg-white relative"> {% if user.is_authenticated %}'
+                            + '<button class="absolute top-2 right-2 text-black text-xl w-8 shadow backdrop-blur bg-opacity-60 hover:bg-opacity-100 transition aspect-square bg-white rounded-full">'
+                            + '<i class="fa-regular fa-bookmark"></i> </button>'
+                            + '{% endif %}'
+                            + '<img src="' + books[index].fields.image_l + '"alt="' + books[index].fields.title + '" class="rounded-t-md w-full aspect-[4/6] object-cover bg-slate-300" />'
+                            + '<div class="p-3 pt-1 border-t-2 border-t-slate-200">'
+                            + '<h3 class="text-lg sm:text-xl font-semibold max-w-[20ch] overflow-hidden truncate">' + books[index].fields.title + '</h3>'
+                            + '<small>' + books[index].fields.author +'</small>'
+                            + '</div></li>'
+        });
+        document.getElementById("book_list").innerHTML = HTMLString;
+
+        HTMLString = ''
+        if (keyword == ''){
+            HTMLString = 'Currently, we have ' + books.length + ' book(s)'
+        } else if (books.length == 0){
+            HTMLString = "No search result found for '" + keyword + "'"
+        } else{
+            HTMLString = books.length + " search results for '" + keyword + "'"
+        }
+        document.getElementById("jumlah_buku").innerHTML = HTMLString
+    }
+    document.getElementById("search").onkeyup = refresh_books
+
+
+    addEventListener("load", (event) => {refresh_books()});
+</script>
+
+
+{% endblock scripts %}
