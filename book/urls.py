@@ -8,4 +8,5 @@ urlpatterns = [
     path('', views.home_page, name='Home'),
     path('books/<int:book_id>/', views.book_detail, name='Book Detail'),
     path('api/books/', views.get_all_books, name='Get All Books'),
+    path('json/', views.get_books_json, name="get_books_json"),
 ]
