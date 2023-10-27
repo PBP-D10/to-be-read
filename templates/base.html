@@ -13,43 +13,51 @@
     {% block styles %}{% endblock styles %}
   </head>
   <body class="">
-    <nav class="w-full shadow-xl px-5 py-3 border-r-2 border-r-zinc-200 bg-zinc-50 bg-white flex items-center justify-between gap-5">
+    <nav class="sticky top-0 left-0 z-40 w-full shadow-md px-5 py-3 border-r-2 border-r-zinc-200 bg-zinc-50 bg-white flex items-center justify-between gap-5">
       <h1 class="text-2xl sm:text-3xl font-semibold text-center text-sky-600">
         <a href="{% url 'book:Home' %}">
+          <i class="fa-solid fa-book-open-reader"></i>
           TBRead
         </a>
       </h1>
-      <ul class="items-center justify-start gap-5 text-lg fixed top-0 -left-full origin-left flex flex-col sm:flex-row sm:static transition-all duration-500 bg-white sm:bg-transparent w-full h-screen sm:w-max sm:h-min sm:gap-3 p-5 sm:p-0" id="navlinks">
-        <li class="sm:hidden">
+      <ul class="z-50 items-center justify-start gap-5 text-lg fixed top-0 -left-full origin-left flex flex-col md:flex-row md:static transition-all duration-500 bg-white md:bg-transparent w-full h-screen md:w-max md:h-min md:gap-5 p-5 md:p-0" id="navlinks">
+        <li class="md:hidden">
           <h1 class="text-4xl font-semibold text-center text-sky-600">
             <a href="{% url 'book:Home' %}">
+              <i class="fa-solid fa-book-open-reader"></i>
               TBRead
             </a>
           </h1>
         </li>
-        <li class="flex-1">
+        <li class="">
           <form action="{% url 'book:Home' %}" method="GET">
             <input
               type="search"
               name="search"
               id="search"
-              class="w-72 mx-auto px-1 py-0.5 border-2 border-sky-500 rounded-md focus:outline-none focus:ring-2 focus:ring-sky-500 focus:border-transparent"
+              class="w-64 mx-auto px-1 py-0.5 border-2 border-slate-300 rounded-md outline-none"
               placeholder="Search"
             />
           </form>
         </li>
         <div class=" flex gap-3 justify-between items-center flex-col sm:flex-row">
           {% if user.is_authenticated %}
-            <h1 class="text-lg font-medium">
+          <li class="">
+            <a href="{% url 'reader:show_saved' %}">
+              <i class="fa-solid fa-bookmark"></i>
+              Bookmark
+            </a>
+          </li>
+          <li class="">
+            <a href="{% url 'reader:view_profile' %}" class="text-lg">
               <i class="fa-solid fa-user mr-1"></i>
-              {{ user.get_username }}
-            </h1>
+              Profile
+            </a>
+          </li>
+          <li class="">
           <a href="{% url 'Logout' %}" class="transition-colors hover:text-sky-500">
             <i class="fa-solid fa-arrow-right-from-bracket mr-1"></i>
             Logout
-          </a>
-          <a href="{% url 'publisher:create_book' %}" class="transition-colors hover:text-sky-500">
-            Add new Book
           </a>
           {% else %}
           <a href="{% url 'Login' %}" class="transition-colors hover:text-sky-500">
@@ -58,12 +66,12 @@
           </a>
           {% endif %}
         </div>
-        <button class="sm:hidden" id="closeNavBtn">
+        <button class="md:hidden" id="closeNavBtn">
           <i class="fa-solid fa-times text-3xl"></i>
         </button>
-        <div class="pb-20 sm:hidden"/>
+        <div class="pb-20 md:hidden"/>
       </ul>
-      <button class="sm:hidden" id="openNavBtn">
+      <button class="md:hidden" id="openNavBtn">
         <i class="fa-solid fa-bars text-2xl"></i>
       </button>
     </nav>
