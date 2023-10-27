@@ -59,6 +59,9 @@
             <i class="fa-solid fa-arrow-right-from-bracket mr-1"></i>
             Logout
           </a>
+          <a href="{% url 'publisher:create_book' %}" class="transition-colors hover:text-sky-500">
+            Create book
+            </a>
           {% else %}
           <a href="{% url 'Login' %}" class="transition-colors hover:text-sky-500">
             <i class="fa-solid fa-arrow-right-to-bracket mr-1"></i>
