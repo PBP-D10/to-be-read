@@ -70,7 +70,7 @@
                 dataType: 'json',
                 success: function(response) {
                     if(response.status === 'success') {
-                        window.location.href = "/book/home.html/";
+                        window.location.href = "book:home_page";
                     } else {
                         alert('Error: ' + JSON.stringify(response.errors));
                     }
