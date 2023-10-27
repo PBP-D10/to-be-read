@@ -44,8 +44,11 @@
     async function getBooks(keyword) {
         const response = await fetch("{% url 'book:Get All Books' %}}");
         const data = await response.json();
-        return data.items;
+        console.log(data)
+        return data;
     }
+
+    const searchInput = document.querySelector("#search-input");
 
 </script>
 {% endblock scripts %}
