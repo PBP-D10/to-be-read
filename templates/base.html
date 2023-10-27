@@ -41,16 +41,16 @@
         </li>
           {% if user.is_authenticated %}
           <li class="">
-            <a href="{% url 'book:Home' %}">
+            <a href="{% url 'reader:show_saved' %}">
               <i class="fa-solid fa-bookmark"></i>
               Bookmark
             </a>
           </li>
           <li class="">
-            <h1 class="text-lg">
+            <a href="{% url 'reader:view_profile' %}" class="text-lg">
               <i class="fa-solid fa-user mr-1"></i>
               Profile
-            </h1>
+            </a>
           </li>
           <li class="">
           <a href="{% url 'Logout' %}" class="transition-colors hover:text-sky-500">
