@@ -12,7 +12,9 @@ def get_all_books(request):
     return HttpResponse(books_json, content_type='application/json')
 
 def home_page(request):
-    return render(request, 'home.html', context={})
+    books = Book.objects.all().order_by('-date_added')
+    context = {'books': books}
+    return render(request, 'home.html', context)
 
 @csrf_exempt
 def get_books_json(request):
