@@ -46,19 +46,23 @@ def create_ajax(request):
 
 def view_profile(request):
     current_profile = Profile.objects.get(user=request.user)
-    saved = SavedBook.objects.filter(owner=request.user)
-    context = {'profile':current_profile,'saved':saved}
+    context = {'profile':current_profile}
     return render(request, "profile.html", context)
 
 def get_profile_json(request):
     profile = Profile.objects.get(user=request.user)
+    formatted_date_of_birth = profile.date_of_birth.strftime('%d-%m-%Y')
     profile_data = {
         "name": profile.name,
         "email": profile.email,
         "address": profile.address,
-        "date_of_birth": profile.date_of_birth.strftime("%Y-%m-%d") if profile.date_of_birth else None
+        "date_of_birth": formatted_date_of_birth
     }
     return JsonResponse(profile_data)
+
+def get_savedBook_json(request):
+    savedBook = SavedBook.objects.filter(owner=request.user)
+    return HttpResponse(serializers.serialize('json', savedBook))
 
 @csrf_exempt
 def edit_profile_ajax(request):

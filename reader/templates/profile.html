@@ -16,7 +16,6 @@
         </div>
     </div>
 </div>
-
 <div id="overlay" class="fixed inset-0 bg-black opacity-50 z-40 hidden"></div>
 <div id="modal" class="fixed inset-0 flex items-center justify-center z-50 hidden overflow-x-hidden overflow-y-auto">
     <div class="relative bg-white w-full max-w-md max-h-full p-6 rounded-lg">
@@ -62,12 +61,17 @@
 
     }
 
+    async function getSavedBook(){
+        return fetch("{% url 'reader:get_savedBook_json' %}").then((res) => res.json())
+    }
+
     async function refreshProfile(){
         const profileCard = document.getElementById("profileCard");
         const profile = await getProfile();
+        const saved = await getSavedBook();
         profileCard.innerHTML = `
             <h3 class="text-center text-xl font-medium mb-2">${profile.name}</h3>
-            <p class="text-center text-gray-500 text-xs font-semibold mb-4">Saved ${profile.saved || 0} Books on TBRead</p>
+            <p class="text-center text-gray-500 text-xs font-semibold mb-4">Saved ${saved.length} Books on TBRead</p>
             <hr>
             <table class="text-s my-5">
                 <tr>
@@ -101,6 +105,7 @@
     }
   
     function closeModal() {
+      document.getElementById('editForm').reset()
       modal.classList.add('hidden');
       overlay.classList.add('hidden');
     }
