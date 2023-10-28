@@ -62,24 +62,27 @@
 
 <script>
     $(document).ready(function() {
-        $("#submitButton").click(function() {
-            $.ajax({
-                url: "",  // URL tempat view Anda berada
-                type: "POST",
-                data: $("#add-book-form").serialize(),
-                dataType: 'json',
-                success: function(response) {
-                    if(response.status === 'success') {
-                        if (typeof window.opener.refresh_books === "function") { 
-                            window.opener.refresh_books();
-                        }
-                        window.location.href = "{% url 'book:Home' %}";
-                    } else {
-                        alert('Error: ' + JSON.stringify(response.errors));
+    $("#submitButton").click(function(event) {
+        event.preventDefault();  // Mencegah submit form HTML
+        $.ajax({
+            url: "",  // URL tempat view Anda berada
+            type: "POST",
+            data: $("#add-book-form").serialize(),
+            dataType: 'json',
+            success: function(response) {
+                console.log(response);
+                if(response.status === 'success') {
+                    if (typeof window.opener.refresh_books === "function") { 
+                        window.opener.refresh_books();
                     }
+                    window.location.href = "{% url 'book:Home' %}";
+                } else {
+                    alert('Error: ' + JSON.stringify(response.errors));
                 }
-            });
+                return redirect('book:Home')
+            }
         });
     });
+});
 </script>
 {% endblock %}

@@ -54,12 +54,12 @@ const deleteBookBtn = document.querySelector('#delete_book');
 function deleteBook() {
     const bookId = {{ book.id }};
 
-    fetch(`{% url 'publisher:delete_book' book_id=book.id %}`, {
+    fetch(`{% url 'publisher:delete_book' id=book.id %}`, {
         method: 'POST',
     })
     .then((response) => {
         if (response.ok) {
-            window.location = "{% url 'Home' %}";
+            window.location = "{% url 'book:Home' %}";
         }
     })
     .catch((error) => {
