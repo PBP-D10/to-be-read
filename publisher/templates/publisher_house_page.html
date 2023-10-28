@@ -1,9 +1,9 @@
 {% extends "base.html" %}
 
 {% block content %}
-    <h1 class="text-2xl font-semibold mb-4 p-5">Publisher Houses</h1>
+    <h1 class="text-2xl font-semibold mt-2 mb-2 p-5">Publisher House(s)</h1>
 
-    <div id="publisher-house-list" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
+    <div id="publisher-house-list" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-2">
     </div>
 
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
@@ -11,7 +11,7 @@
         refreshPublisherHouses();
     
         async function getPublisherHouses() {
-            return fetch("{% url 'get_publisher_houses' %}").then((res) => res.json());
+            return fetch("{% url 'publisher:get_publisher_house' %}").then((res) => res.json());
         }
     
         async function refreshPublisherHouses() {
@@ -20,9 +20,9 @@
     
             publisherHouses.forEach((house) => {
                 htmlString += `
-                    <div class="bg-white p-5 mx-5 shadow-md rounded-md mb-4">
-                        <h2 class="text-xl font-bold mb-2">${house.name}</h2>
-                        <p class="text-sm text-gray-600">Year Established: ${house.year_established}</p>
+                    <div class="bg-white p-5 mx-5 shadow-md rounded-md mb-4 hover:bg-blue-100">
+                        <h2 class="text-xl font-bold text-sky-600 mb-2">${house.name}</h2>
+                        <p class="text-sm text-gray-600">Est. ${house.year_established}</p>
                     </div>
                 `;
             });
