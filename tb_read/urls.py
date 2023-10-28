@@ -23,4 +23,5 @@ urlpatterns = [
     path('auth/', include("api.urls")),
     path('publisher/', include('publisher.urls')),
     path('', include("reader.urls")),
+    path('publisher/', include("publisher.urls"))
 ]
