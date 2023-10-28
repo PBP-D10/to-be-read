@@ -1,34 +1,48 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponseNotFound, HttpResponse
-from book.models import SavedBook
+from book.models import SavedBook, Book
 from django.views.decorators.csrf import csrf_exempt
 from reader.models import Profile
 from django.shortcuts import render
 from django.urls import reverse
-from django.core import serializers
+from django.http import HttpResponseRedirect
+from reader.forms import SavedForm
 from django.http import JsonResponse
+from django.core import serializers
 
 # Create your views here.
 @login_required(login_url='login')
+@csrf_exempt
 def show_saved(request):       
+    # saved_books = SavedBook.objects.filter(owner=request.user)
+    # context = {
+    #     'name': request.user.username,
+    #     'saved_books': saved_books,
+    # }
+    # if request.method =='POST':
+    #     selected_value = request.POST.get('selected_value')
+    #     if selected_value == "year":
+    #         saved_books = saved_books.order_by("-year")
+
+    # return render(request, "my_tbr.html", context)
+    # views.py
     saved_books = SavedBook.objects.filter(owner=request.user)
+    form = SavedForm(request.POST or None)
+
+    if request.method == 'POST' : #and request.is_ajax():
+
+        if form.is_valid():
+            selected_value = form.cleaned_data['selected_value']
+            if selected_value != 'date_added':
+                saved_books = saved_books.order_by(selected_value)
+
     context = {
-        'name': request.user.username,
         'saved_books': saved_books,
+        'form': form,
     }
-    if request.method =='POST':
-        selected_value = request.POST.get('selected_value')
-        if selected_value == "year":
-            saved_books = saved_books.order_by("-year")
-
     return render(request, "my_tbr.html", context)
-
-@login_required(login_url='login')
-def remove_book(request, id):
-    saved_book = SavedBook.objects.get(pk=id)
-    saved_book.delete()
-    return redirect('reader:show_saved')
+    #return HttpResponse(status=400)  # Bad request if the form is not valid or the request is not Ajax
 
 @csrf_exempt
 def create_ajax(request):
@@ -84,6 +98,14 @@ def edit_profile_ajax(request):
             profile.date_of_birth = date_of_birth
         
         profile.save()
+
         return HttpResponse("Profile Updated", status=200)
     
     return HttpResponseNotFound()
+
+def saved_detail(request, book_id):
+    book = Book.objects.get(id =book_id)
+    context = {
+        'book': book,
+    }
+    return render(request, 'saved_detail.html', context=context)

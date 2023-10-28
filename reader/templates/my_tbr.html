@@ -8,37 +8,72 @@
     <h1 class="text-2xl sm:text-3xl font-semibold">Welcome to My TBRead</h1>
     {% if saved_books|length == 0 %}
         <p class="text-lg sm:text-xl">Currently, there are no books to be read 😣</p>
-        <form method="POST">
-            <label for="sortDropdown">Sorted by : </label>
-            <select id="sortDropdown" name="selected_value">
-                <option value="saved" selected>date saved</option>
-                <option value="date_added">date published</option>
-            </select>
-        </form>
     {% else %}
-        <form method="POST">
-            <label for="sortDropdown">Sorted by : </label>
-            <select id="sortDropdown" name="selected_value">
-                <option value="saved" selected>date saved</option>
-                <option value="date_added">date published</option>
-            </select>
-        </form>
+        <div class="flex justify-end items-center">
+            <label for="order-form" class="text-sm sm:text-base font-semibold text-gray-600">Sorted by : </label>
+            <form id="order-form" class="flex items-center space-x-6" style="margin-left: 10px;">
+                {{ form.selected_value }}
+            </form>
+        </div>
         <p class="text-lg sm:text-xl">Currently, you have {{ saved_books|length }} book(s) to be read</p>
-        <ul class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-5 mt-8">
-        {% for book in saved_books %}
+        <ul id="saved_book_list" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-5 mt-8" >
+        {% for saved_book in saved_books %}
+        <a href="mytbr/{{saved_book.book.pk}}">
             <li class="rounded-md shadow bg-white relative">
-                <img src="{{ book.image_l }}" alt="{{ book.title }}" class="rounded-t-md w-full aspect-[4/6] object-cover bg-slate-300" />
+                <img src="{{ saved_book.book.image_l }}" alt="{{ saved_book.book.title }}" class="rounded-t-md w-full aspect-[4/6] object-cover bg-slate-300" />
                 <div class="p-3 pt-1 border-t-2 border-t-slate-200">
-                <h3 class="text-lg sm:text-xl font-semibold max-w-[20ch] overflow-hidden truncate">{{ book.title }}</h3>
-                <small>{{ book.author}}</small>
+                <h3 class="text-lg sm:text-xl font-semibold max-w-[20ch] overflow-hidden truncate">{{ saved_book.book.title }}</h3>
+                <small>{{ saved_book.book.author}}</small>
                 </div>
             </li>
+        </a>
         {% endfor %}
     {% endif %}
-    </ul>
-    <a href="/" class="transition-colors hover:text-sky-500">
-        Look at more books
-    </a>
+        </ul>
+<br>
+    <div class="h-screen flex flex-col items-center">
+        <a href="/" class="transition-colors hover:text-sky-500" >
+            Look at more books
+        </a>
+    </div>
 </main>
 {% endblock content %}
-{% block scripts %}{% endblock scripts %}
+{% block scripts %}
+    <script>
+
+        async function get_books(selectedValue) {
+            var formData = new FormData();
+            formData.append("selected_value", selectedValue); // Pass the selected value
+
+            return await fetch("{% url 'reader:show_saved' %}", {
+                method: "POST",
+                body: formData
+            }).then((res) => res.json());
+        }
+
+        async function refresh_books() {
+            console.log("refreshing");
+
+            const selectedValue = document.getElementById("order-form").value; // Get the selected value from the dropdown
+
+            var books = await get_books(selectedValue); // Pass the selected value
+            console.log(books);
+
+            var HTMLString = '';
+
+            books.forEach((item, index) => {
+                HTMLString += `<li class="rounded-md shadow bg-white relative"><a href="{% url 'book:Book Detail' 177013 %}">`.replace("177013", books[index].pk)
+                                + '<img src="' + books[index].fields.image_l + '" alt="' + books[index].fields.title + '" class="rounded-t-md w-full aspect-[4/6] object-cover bg-slate-300" />'
+                                + '<div class="p-3 pt-1 border-t-2 border-t-slate-200">'
+                                + '<h3 class="text-lg sm:text-xl font-semibold max-w-[20ch] overflow-hidden truncate">' + books[index].fields.title + '</h3>'
+                                + '<small>' + books[index].fields.author +'</small>'
+                                + '</div></a></li>';
+            });
+            document.getElementById("saved_book_list").innerHTML = HTMLString;
+        }
+        document.getElementById("order-form").onchange = refresh_books; // Update when the dropdown selection changes
+
+        addEventListener("load", (event) => { refresh_books(); });
+
+    </script>
+{% endblock scripts %}
