@@ -1,0 +1,13 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <h1 class="text-2xl font-semibold mb-2 p-5">Edit Book</h1>
+
+    <form method="post" class="px-5">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit" class="mt-4 bg-blue-500 hover:bg-blue-700 text-white font-semibold py-2 px-4 rounded">
+            Save Changes
+        </button>
+    </form>
+{% endblock content %}
