@@ -38,9 +38,25 @@ def create_ajax(request):
 def view_profile(request):
     current_profile = Profile.objects.get(user=request.user)
     context = {'profile':current_profile}
-    return render(request, "view_profile.html", context)
+    return render(request, "profile.html", context)
 
-def edit_profile(request):
+def get_profile_json(request):
+    profile = Profile.objects.get(user=request.user)
+    formatted_date_of_birth = profile.date_of_birth.strftime('%d-%m-%Y')
+    profile_data = {
+        "name": profile.name,
+        "email": profile.email,
+        "address": profile.address,
+        "date_of_birth": formatted_date_of_birth
+    }
+    return JsonResponse(profile_data)
+
+def get_savedBook_json(request):
+    savedBook = SavedBook.objects.filter(owner=request.user)
+    return HttpResponse(serializers.serialize('json', savedBook))
+
+@csrf_exempt
+def edit_profile_ajax(request):
     profile = Profile.objects.get(user=request.user)
 
     if request.method == 'POST':
@@ -59,10 +75,10 @@ def edit_profile(request):
             profile.date_of_birth = date_of_birth
         
         profile.save()
-        return HttpResponseRedirect(reverse('reader:view_profile'))
 
-    context = {'profile': profile}
-    return render(request, "edit_profile.html", context)
+        return HttpResponse("Profile Updated", status=200)
+    
+    return HttpResponseNotFound()
 
 def saved_detail(request, book_id):
     book = Book.objects.get(id =book_id)
