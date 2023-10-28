@@ -21,5 +21,3 @@ class SavedBook(models.Model):
     owner = models.ForeignKey(User, on_delete=models.CASCADE)
     book = models.ForeignKey(Book, on_delete=models.CASCADE)
 
-class DeleteBook(models.Model):
-    book = models.ForeignKey(Book, on_delete=models.CASCADE)

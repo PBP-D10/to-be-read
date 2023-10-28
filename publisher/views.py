@@ -1,8 +1,7 @@
-from django.shortcuts import render, redirect, get_object_or_404
+from django.shortcuts import render, redirect
 from book.models import Book
 from .forms import BookForm
 from django.http import JsonResponse
-from book.models import DeleteBook
 from django.views.decorators.csrf import csrf_exempt
 from django.contrib.auth.decorators import login_required
 
@@ -12,7 +11,6 @@ def create_book(request):
         form = BookForm(request.POST)
         if form.is_valid():
             form.save()
-            return JsonResponse({'status': 'success'})
         else:
             return JsonResponse({'status': 'error', 'errors': form.errors})
     else:
