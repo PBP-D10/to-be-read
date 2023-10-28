@@ -6,8 +6,8 @@ from django.views.decorators.csrf import csrf_exempt
 from reader.models import Profile
 from django.shortcuts import render
 from django.urls import reverse
-from django.http import HttpResponseRedirect
 from django.core import serializers
+from django.http import JsonResponse
 
 # Create your views here.
 @login_required(login_url='login')
@@ -24,6 +24,7 @@ def show_saved(request):
 
     return render(request, "my_tbr.html", context)
 
+@login_required(login_url='login')
 def remove_book(request, id):
     saved_book = SavedBook.objects.get(pk=id)
     saved_book.delete()
@@ -32,11 +33,13 @@ def remove_book(request, id):
 @csrf_exempt
 def create_ajax(request):
     if request.method == 'POST':
-        owner = request.POST.get("owner")
-        book = request.POST.get("book")
+        book_id = request.POST.get("book")
 
-        new_book = SavedBook(owner=owner, book=book)
-        new_book.save()
+        new_book = SavedBook.objects.get_or_create(owner=request.user, book_id=book_id)
+        if (new_book[1] == False):
+            return HttpResponse(b"ALREADY_EXISTS", status=200)
+        else:
+            new_book[0].save()
         return HttpResponse(b"CREATED", status=201)
 
     return HttpResponseNotFound()
@@ -48,8 +51,14 @@ def view_profile(request):
     return render(request, "profile.html", context)
 
 def get_profile_json(request):
-    profiles = Profile.objects.get(user=request.user)
-    return HttpResponse(serializers.serialize('json',profiles))
+    profile = Profile.objects.get(user=request.user)
+    profile_data = {
+        "name": profile.name,
+        "email": profile.email,
+        "address": profile.address,
+        "date_of_birth": profile.date_of_birth.strftime("%Y-%m-%d") if profile.date_of_birth else None
+    }
+    return JsonResponse(profile_data)
 
 @csrf_exempt
 def edit_profile_ajax(request):
