@@ -54,14 +54,20 @@
               Profile
             </a>
           </li>
+
+          <li id="publisher-access" class="hidden">
+            <a href="{% url 'publisher:create_book' %}" class="transition-colors hover:text-sky-500">
+              Create book
+              </a>
+            </li>
+
           <li class="">
           <a href="{% url 'Logout' %}" class="transition-colors hover:text-sky-500">
             <i class="fa-solid fa-arrow-right-from-bracket mr-1"></i>
             Logout
           </a>
-          <a href="{% url 'publisher:create_book' %}" class="transition-colors hover:text-sky-500">
-            Create book
-            </a>
+        </li>
+        
           {% else %}
           <a href="{% url 'Login' %}" class="transition-colors hover:text-sky-500">
             <i class="fa-solid fa-arrow-right-to-bracket mr-1"></i>
@@ -94,8 +100,21 @@
         navlinks.classList.add("-left-full");
         navlinks.classList.remove("left-0");
     });
+
+    async function check_status() {
+      const response = await fetch("{% url 'publisher:check_is_publisher' %}");
+      const data = await response.json();
+      console.log(data);
+      if (data.status !== "publisher") {
+        document.getElementById("publisher-access").remove();
+      } else {
+        document.getElementById("publisher-access").classList.remove("hidden");
+      }
+    }
     
-    
+    window.addEventListener("load", () => {
+      check_status();
+    })
 
     </script>
     {% block scripts %} {% endblock scripts %}

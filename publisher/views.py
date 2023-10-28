@@ -4,6 +4,7 @@ from .forms import BookForm
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 from django.contrib.auth.decorators import login_required
+from .models import Publisher
 
 @login_required(login_url='login')
 def create_book(request):
@@ -28,5 +29,9 @@ def delete_book(request, id):
         print("Exception type:", type(e))
         print("Exception message:", str(e))
         return JsonResponse({"error": str(e)}, status=500)
+
+def check_is_publisher(request):
+    publisher = Publisher.objects.filter(user=request.user)
+    return JsonResponse({'is_publisher': publisher.exists()})
 
 
