@@ -21,6 +21,9 @@
         </button>
         <button id="edit_book" class="px-4 py-2 mt-2 bg-green-500 text-white font-medium rounded-md transition hover:scale-105">
             Edit Book
+          </button>
+        <button id="delete_book" class="px-4 py-2 bg-red-500 rounded-md text-white font-medium transition hover:scale-105">
+            Delete Book
         </button>
         {% endif %}
     </section>
@@ -56,5 +59,24 @@ editBookBtn.addEventListener('click', function() {
     window.location = `/publisher/edit-book/${bookId}/`;
 });
 
+const deleteBookBtn = document.querySelector('#delete_book');
+
+function deleteBook() {
+    const bookId = {{ book.id }};
+
+    fetch(`{% url 'publisher:delete_book' id=book.id %}`, {
+        method: 'POST',
+    })
+    .then((response) => {
+        if (response.ok) {
+            window.location = "{% url 'book:Home' %}";
+        }
+    })
+    .catch((error) => {
+        console.log(error);
+    });
+}
+
+deleteBookBtn.addEventListener('click', deleteBook);
 </script>
 {% endblock scripts %}
