@@ -15,18 +15,6 @@ from django.core import serializers
 @login_required(login_url='login')
 @csrf_exempt
 def show_saved(request):       
-    # saved_books = SavedBook.objects.filter(owner=request.user)
-    # context = {
-    #     'name': request.user.username,
-    #     'saved_books': saved_books,
-    # }
-    # if request.method =='POST':
-    #     selected_value = request.POST.get('selected_value')
-    #     if selected_value == "year":
-    #         saved_books = saved_books.order_by("-year")
-
-    # return render(request, "my_tbr.html", context)
-    # views.py
     saved_books = SavedBook.objects.filter(owner=request.user)
     form = SavedForm(request.POST or None)
 
@@ -42,7 +30,6 @@ def show_saved(request):
         'form': form,
     }
     return render(request, "my_tbr.html", context)
-    #return HttpResponse(status=400)  # Bad request if the form is not valid or the request is not Ajax
 
 @csrf_exempt
 def create_ajax(request):
@@ -65,12 +52,12 @@ def view_profile(request):
 
 def get_profile_json(request):
     profile = Profile.objects.get(user=request.user)
-    formatted_date_of_birth = profile.date_of_birth.strftime('%d-%m-%Y')
+    # formatted_date_of_birth = profile.date_of_birth.strftime('%d-%m-%Y')
     profile_data = {
         "name": profile.name,
         "email": profile.email,
         "address": profile.address,
-        "date_of_birth": formatted_date_of_birth
+        "date_of_birth": profile.date_of_birth
     }
     return JsonResponse(profile_data)
 
