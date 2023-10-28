@@ -4,17 +4,12 @@
 <link rel="stylesheet" href="{% static 'styles/home.css' %}" />
 {% endblock styles %} 
 {% block content %}
+
 <main class="p-3 sm:p-5 flex flex-col">
     <h1 class="text-2xl sm:text-3xl font-semibold">Welcome to My TBRead</h1>
     {% if saved_books|length == 0 %}
         <p class="text-lg sm:text-xl">Currently, there are no books to be read 😣</p>
     {% else %}
-        <div class="flex justify-end items-center">
-            <label for="order-form" class="text-sm sm:text-base font-semibold text-gray-600">Sorted by : </label>
-            <form id="order-form" class="flex items-center space-x-6" style="margin-left: 10px;">
-                {{ form.selected_value }}
-            </form>
-        </div>
         <p class="text-lg sm:text-xl">Currently, you have {{ saved_books|length }} book(s) to be read</p>
         <ul id="saved_book_list" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-5 mt-8" >
         {% for saved_book in saved_books %}
@@ -30,50 +25,66 @@
         {% endfor %}
     {% endif %}
         </ul>
-<br>
+    <br>
+        <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h1 class="modal-title fs-5 flex items-center justify-center" id="exampleModalLabel">Add Your favorite Quote!</h1>
+                    </div>
+                    <div class="modal-body flex items-center justify-center">
+                        <form id="form" onsubmit="return false;">
+                            {% csrf_token %}
+                            <div class="mb-3">
+                                <textarea class="form-control" id="text" name="text"></textarea>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="modal-footer flex items-center justify-center">
+                        <button type="button" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-full" id="button_add" data-bs-dismiss="modal">Add Quote</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    <br>
+        <div id = "quote_text" class="flex items-center justify-center"></div>
+    <br>
     <div class="h-screen flex flex-col items-center">
-        <a href="/" class="transition-colors hover:text-sky-500" >
+        <button href="/" class="transition-colors hover:text-sky-500 bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold py-2 px-4 rounded-l">
             Look at more books
-        </a>
+        </button>
     </div>
 </main>
 {% endblock content %}
 {% block scripts %}
     <script>
 
-        async function get_books(selectedValue) {
-            var formData = new FormData();
-            formData.append("selected_value", selectedValue); // Pass the selected value
+        async function getQuotes() {
+            return fetch("{% url 'reader:get_quote_json' %}").then((res) => res.json())
+        }
+        
+        async function refreshItems() {
+            document.getElementById("quote_text").innerHTML = ""
+            const quotes = await getQuotes()
+            let htmlString = `<h3>📚 ${quotes[quotes.length -1].fields.text}</h3>`
+ 
+            
+            document.getElementById("quote_text").innerHTML = htmlString
+        }
 
-            return await fetch("{% url 'reader:show_saved' %}", {
+        refreshItems()
+
+        function addQuote() {
+            fetch("{% url 'reader:create_quote' %}", {
                 method: "POST",
-                body: formData
-            }).then((res) => res.json());
+                body: new FormData(document.querySelector('#form'))
+            }).then(refreshItems)
+
+            document.getElementById("form").reset()
+            return false
         }
 
-        async function refresh_books() {
-            console.log("refreshing");
-
-            const selectedValue = document.getElementById("order-form").value; // Get the selected value from the dropdown
-
-            var books = await get_books(selectedValue); // Pass the selected value
-            console.log(books);
-
-            var HTMLString = '';
-
-            books.forEach((item, index) => {
-                HTMLString += `<li class="rounded-md shadow bg-white relative"><a href="{% url 'book:Book Detail' 177013 %}">`.replace("177013", books[index].pk)
-                                + '<img src="' + books[index].fields.image_l + '" alt="' + books[index].fields.title + '" class="rounded-t-md w-full aspect-[4/6] object-cover bg-slate-300" />'
-                                + '<div class="p-3 pt-1 border-t-2 border-t-slate-200">'
-                                + '<h3 class="text-lg sm:text-xl font-semibold max-w-[20ch] overflow-hidden truncate">' + books[index].fields.title + '</h3>'
-                                + '<small>' + books[index].fields.author +'</small>'
-                                + '</div></a></li>';
-            });
-            document.getElementById("saved_book_list").innerHTML = HTMLString;
-        }
-        document.getElementById("order-form").onchange = refresh_books; // Update when the dropdown selection changes
-
-        addEventListener("load", (event) => { refresh_books(); });
+        document.getElementById("button_add").onclick = addQuote
 
     </script>
 {% endblock scripts %}
