@@ -8,3 +8,6 @@ class Profile(models.Model):
     email = models.CharField(max_length=255)
     address = models.CharField(max_length=255,null=True,blank=True)
     date_of_birth = models.DateField(null=True,blank=True)
+
+class Quote(models.Model):
+    text = models.TextField()
