@@ -42,12 +42,11 @@ def view_profile(request):
 
 def get_profile_json(request):
     profile = Profile.objects.get(user=request.user)
-    # formatted_date_of_birth = profile.date_of_birth.strftime('%d-%m-%Y')
     profile_data = {
         "name": profile.name,
         "email": profile.email,
         "address": profile.address,
-        "date_of_birth": profile.date_of_birth
+        "date_of_birth": profile.date_of_birth,
     }
     return JsonResponse(profile_data)
 
@@ -64,21 +63,28 @@ def edit_profile_ajax(request):
         email = request.POST.get('email')
         address = request.POST.get('address')
         date_of_birth = request.POST.get('date_of_birth')
-        
+
         if name != profile.name:
             profile.name = name
         if email != profile.email:
             profile.email = email
-        if address != profile.address:
+            
+        if address == '' or address == '-':
+            profile.address = None
+        else:
             profile.address = address
-        if date_of_birth != profile.date_of_birth:
+
+        if date_of_birth == '':
+            profile.date_of_birth = None
+        else:
             profile.date_of_birth = date_of_birth
-        
+
         profile.save()
 
         return HttpResponse("Profile Updated", status=200)
-    
+
     return HttpResponseNotFound()
+
 
 def saved_detail(request, book_id):
     book = Book.objects.get(id =book_id)
