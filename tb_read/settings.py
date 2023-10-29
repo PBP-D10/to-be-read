@@ -27,6 +27,8 @@ SECRET_KEY = 'django-insecure-4silik)13u%e^p=_7&qsnzxq6bqd8mk86+&-m*sk2p^m)s0rk2
 # SECURITY WARNING: don't run with debug turned on in production!
 PRODUCTION = env.bool('PRODUCTION', False)
 
+CSRF_TRUSTED_ORIGINS = ["https://*.fly.dev"]  
+
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
@@ -140,13 +142,7 @@ STATIC_ROOT = BASE_DIR / 'staticfiles'
 
 STATICFILES_DIRS = [ BASE_DIR / 'static']
 
-STORAGES = {
-    # ...
-    "staticfiles": {
-        "BACKEND": "whitenoise.storage.CompressedManifestStaticFilesStorage",
-    },
-}
-
+STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
 
