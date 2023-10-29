@@ -105,8 +105,8 @@
     async function check_status() {
       const response = await fetch("{% url 'publisher:check_is_publisher' %}");
       const data = await response.json();
-      console.log(data);
-      if (data.status !== "publisher") {
+      // console.log(data);
+      if (!data.is_publisher) {
         document.getElementById("publisher-access").remove();
       } else {
         isPublisher = true;
