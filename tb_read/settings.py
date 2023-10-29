@@ -29,6 +29,7 @@ SECRET_KEY = 'django-insecure-4silik)13u%e^p=_7&qsnzxq6bqd8mk86+&-m*sk2p^m)s0rk2
 # SECURITY WARNING: don't run with debug turned on in production!
 PRODUCTION = env.bool('PRODUCTION', False)
 
+CSRF_TRUSTED_ORIGINS = ["*"]  
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
