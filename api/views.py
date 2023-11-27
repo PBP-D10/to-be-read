@@ -53,8 +53,9 @@ def login_endpoint(request):
     if request.method == "POST":
         username = request.POST.get('username')
         password = request.POST.get('password')
+        print(username, password)
         user = authenticate(
-            request, username=request.POST["username"], password=request.POST["password"])
+            request, username=username, password=password)
         if user is not None:
             login(request, user)
             return JsonResponse({
@@ -80,7 +81,7 @@ def login_endpoint(request):
 def register_endpoint(request):
     if request.method == "POST":
         print(request.POST)
-        user = User.objects.create(
+        user = User.objects.create_user(
             username=request.POST.get('username'),
             email=request.POST.get('email'),
             password=request.POST.get('password')
