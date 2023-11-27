@@ -1,7 +1,7 @@
 from django.shortcuts import render
-from django.http import HttpResponse, HttpResponseNotFound
+from django.http import HttpResponse, HttpResponseNotFound, JsonResponse
 from django.core import serializers
-from book.models import Book
+from book.models import Book, LikedBook
 from django.db.models import Q # untuk chain filter
 from django.views.decorators.csrf import csrf_exempt # untuk get_books_json
 
@@ -50,3 +50,8 @@ def book_detail(request, book_id):
     }
     return render(request, 'book_detail.html', context=context)
 
+@csrf_exempt
+def get_like_count(request, book_id):
+    response = {}
+    response['like_count'] = LikedBook.objects.filter(book_id=book_id).count()
+    return JsonResponse(response)
