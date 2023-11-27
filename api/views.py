@@ -7,6 +7,8 @@ from .forms import CustomUserCreationForm
 from django.contrib.auth.decorators import login_required
 from django.views.decorators.csrf import csrf_exempt
 from django.http import JsonResponse
+from django.contrib.auth.models import User
+from reader.models import Profile
 
 # Create your views here.
 
@@ -49,6 +51,8 @@ def logout_view(request):
 @csrf_exempt
 def login_endpoint(request):
     if request.method == "POST":
+        username = request.POST.get('username')
+        password = request.POST.get('password')
         user = authenticate(
             request, username=request.POST["username"], password=request.POST["password"])
         if user is not None:
@@ -62,7 +66,7 @@ def login_endpoint(request):
         else:
             return JsonResponse({
                 "status": False,
-                "message": "Login gagal, akun dinonaktifkan."
+                "message": "Login gagal, periksa kembali email atau kata sandi."
             }, status=401)
 
     else:
@@ -75,18 +79,21 @@ def login_endpoint(request):
 @csrf_exempt
 def register_endpoint(request):
     if request.method == "POST":
-        form = CustomUserCreationForm(request.POST)
-        if form.is_valid():
-            form.save()
-            return JsonResponse({
-                "status": True,
-                "message": "Register sukses!"
-            }, status=200)
-        else:
-            return JsonResponse({
-                "status": False,
-                "message": "Register gagal, periksa kembali data yang dikirimkan."
-            }, status=401)
+        print(request.POST)
+        user = User.objects.create(
+            username=request.POST.get('username'),
+            email=request.POST.get('email'),
+            password=request.POST.get('password')
+        )
+        user.save()
+        profile = Profile.objects.create(
+            user=user, email=request.POST.get('email'))
+        profile.save()
+
+        return JsonResponse({
+            "status": True,
+            "message": "Register sukses!"
+        }, status=200)
 
     else:
         return JsonResponse({
