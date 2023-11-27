@@ -34,13 +34,10 @@
         }).then((res) => res.json())
     }
     async function refresh_books(){
-        console.log("refreshing")
-
         
         const keyword = document.getElementById("search").value
 
         var books = await get_books(keyword)
-        console.log(books)
 
         var HTMLString = ''
 
