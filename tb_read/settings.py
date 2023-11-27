@@ -29,7 +29,7 @@ SECRET_KEY = 'django-insecure-4silik)13u%e^p=_7&qsnzxq6bqd8mk86+&-m*sk2p^m)s0rk2
 # SECURITY WARNING: don't run with debug turned on in production!
 PRODUCTION = env.bool('PRODUCTION', False)
 
-CSRF_TRUSTED_ORIGINS = ["https://*.railway.app"]  
+CSRF_TRUSTED_ORIGINS = ["https://*.railway.app"]
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -50,6 +50,7 @@ INSTALLED_APPS = [
     'reader',
     'publisher',
     'api',
+    'review',
 ]
 
 MIDDLEWARE = [
@@ -103,7 +104,7 @@ if PRODUCTION:
         'default': env.db('DATABASE_URL')
     }
     DATABASES["default"]["ATOMIC_REQUESTS"] = True
-    
+
 # Password validation
 # https://docs.djangoproject.com/en/4.2/ref/settings/#auth-password-validators
 
@@ -142,7 +143,7 @@ STATIC_URL = 'static/'
 
 STATIC_ROOT = BASE_DIR / 'staticfiles'
 
-STATICFILES_DIRS = [ BASE_DIR / 'static']
+STATICFILES_DIRS = [BASE_DIR / 'static']
 
 STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
 # Default primary key field type
