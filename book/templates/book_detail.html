@@ -83,7 +83,7 @@ likeBookBtn.addEventListener('click', likeBook);
 const editBookBtn = document.querySelector('#edit_book');
 const bookId = {{ book.id }};
 
-editBookBtn.addEventListener('click', function() {
+editBookBtn?.addEventListener('click', function() {
     window.location = `/publisher/edit-book/${bookId}/`;
 });
 
