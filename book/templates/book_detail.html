@@ -1,6 +1,5 @@
-{% extends 'base.html' %} {% load static %} 
-{% block title %} {{ book.title}} | TBRead {% endblock title %}
-{% block styles %}
+{% extends 'base.html' %} {% load static %} {% block title %} {{ book.title}} |
+TBRead {% endblock title %} {% block styles %}
 <link rel="stylesheet" href="{% static 'styles/home.css' %}" />
 {% endblock styles %} 
 {% block content %}
@@ -34,8 +33,7 @@
         {% endif %}
     </section>
 </main>
-{% endblock content %}
-{% block scripts %}
+{% endblock content %} {% block scripts %}
 <script>
 const createBookmarkBtn = document.querySelector('#create_bookmark');
 const likeBookBtn = document.querySelector('#like_book');
@@ -44,20 +42,20 @@ const likeBookCount = document.querySelector('#like_count');
 function createBookmark() {
     const bookId = {{ book.id }};
 
-    const formData = new FormData();
-    formData.append('book', bookId);
+      const formData = new FormData();
+      formData.append('book', bookId);
 
-    fetch("{% url 'reader:create_ajax' %}", {
-        method: 'POST',
-        body: formData,
-    })
-    .then((response) => {
-        window.location = "{% url 'reader:show_saved' %}";
-    })
-    .catch((error) => {
-        console.log(error);
-    });
-}
+      fetch("{% url 'reader:create_ajax' %}", {
+          method: 'POST',
+          body: formData,
+      })
+      .then((response) => {
+          window.location = "{% url 'reader:show_saved' %}";
+      })
+      .catch((error) => {
+          console.log(error);
+      });
+  }
 
 async function likeBook(){
     const bookId = {{ book.id }};
@@ -80,32 +78,32 @@ async function likeBook(){
 createBookmarkBtn.addEventListener('click', createBookmark);
 likeBookBtn.addEventListener('click', likeBook);
 
-const editBookBtn = document.querySelector('#edit_book');
-const bookId = {{ book.id }};
+  const editBookBtn = document.querySelector('#edit_book');
+  const bookId = {{ book.id }};
 
 editBookBtn?.addEventListener('click', function() {
     window.location = `/publisher/edit-book/${bookId}/`;
 });
 
-const deleteBookBtn = document.querySelector('#delete_book');
+  const deleteBookBtn = document.querySelector('#delete_book');
 
-function deleteBook() {
-    const bookId = {{ book.id }};
+  function deleteBook() {
+      const bookId = {{ book.id }};
 
-    fetch(`{% url 'publisher:delete_book' id=book.id %}`, {
-        method: 'POST',
-    })
-    .then((response) => {
-        if (response.ok) {
-            window.location = "{% url 'book:Home' %}";
-        }
-    })
-    .catch((error) => {
-        console.log(error);
-    });
-}
+      fetch(`{% url 'publisher:delete_book' id=book.id %}`, {
+          method: 'POST',
+      })
+      .then((response) => {
+          if (response.ok) {
+              window.location = "{% url 'book:Home' %}";
+          }
+      })
+      .catch((error) => {
+          console.log(error);
+      });
+  }
 
-deleteBookBtn.addEventListener('click', deleteBook);
+  deleteBookBtn.addEventListener('click', deleteBook);
 
 function refreshLikeCount () {
     fetch(`{% url 'book:get_like_count' book_id=book.id %}`, {
