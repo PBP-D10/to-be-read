@@ -6,10 +6,14 @@ from .models import Review
 
 
 @csrf_exempt
-def create_review(request):
+def create_review(request, book_id):
+    if not request.user.is_authenticated:
+        return JsonResponse({
+            "status": False,
+            "message": "Anda harus login terlebih dahulu!"
+        }, status=401)
     if request.method == "POST":
         user = request.user
-        book_id = request.POST.get("book_id")
         rating = request.POST.get("rating")
         content = request.POST.get("content")
         new_review = Review.objects.create(
