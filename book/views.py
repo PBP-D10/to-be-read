@@ -1,3 +1,4 @@
+import json
 from django.shortcuts import render
 from django.http import HttpResponse, HttpResponseNotFound, JsonResponse
 from django.core import serializers
@@ -16,19 +17,27 @@ def home_page(request):
     context = {'books': books}
     return render(request, 'home.html', context)
 
+# search bar
 @csrf_exempt
 def get_books_json(request):
+    # print("getbooks")
     if request.method == "POST":
-        keyword =  request.POST.get("keyword") or ""
+        data = json.loads(request.body)
+        keyword = data.get("keyword","")
 
+       # keyword = request.POST.get('keyword', '')
+
+        # print(request.POST)
+        print("keyword is", keyword)
         if keyword == "":
+            print('tai')
             books = Book.objects.all()
 
         else:
             books = Book.objects.filter(Q(title__contains=keyword)
                                             | Q(author__contains=keyword)
                                             | Q(ISBN__contains=keyword))
-            
+        print('kenapa woi')   
         books = books.order_by('-date_added')
 
         context = {
@@ -37,6 +46,7 @@ def get_books_json(request):
         }
         return HttpResponse(serializers.serialize("json", books), content_type="application/json")
     else:
+        print("bukan post")
         keyword = ""
         books = Book.objects.all()
         books = books.order_by('-date_added')
