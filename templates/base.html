@@ -8,19 +8,30 @@
     <title>{% block title %} TBRead {% endblock title %}</title>
     <link rel="stylesheet" href="{% static 'styles/global.css' %}" />
     <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css"/>
-    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css"
+    />
+    <link
+      href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css"
+      rel="stylesheet"
+    />
     {% block styles %}{% endblock styles %}
   </head>
   <body class="">
-    <nav class="sticky top-0 left-0 z-40 w-full shadow-md px-5 py-3 border-r-2 border-r-zinc-200 bg-zinc-50 bg-white flex items-center justify-between gap-5">
+    <nav
+      class="sticky top-0 left-0 z-40 w-full shadow-md px-5 py-3 border-r-2 border-r-zinc-200 bg-zinc-50 bg-white flex items-center justify-between gap-5"
+    >
       <h1 class="text-2xl sm:text-3xl font-semibold text-center text-sky-600">
         <a href="{% url 'book:Home' %}">
           <i class="fa-solid fa-book-open-reader"></i>
           TBRead
         </a>
       </h1>
-      <ul class="z-50 items-center justify-start gap-5 text-lg fixed top-0 -left-full origin-left flex flex-col md:flex-row md:static transition-all duration-500 bg-white md:bg-transparent w-full h-screen md:w-max md:h-min md:gap-5 p-5 md:p-0" id="navlinks">
+      <ul
+        class="z-50 items-center justify-start gap-5 text-lg fixed top-0 -left-full origin-left flex flex-col md:flex-row md:static transition-all duration-500 bg-white md:bg-transparent w-full h-screen md:w-max md:h-min md:gap-5 p-5 md:p-0"
+        id="navlinks"
+      >
         <li class="md:hidden">
           <h1 class="text-4xl font-semibold text-center text-sky-600">
             <a href="{% url 'book:Home' %}">
@@ -40,7 +51,9 @@
             />
           </form>
         </li>
-        <div class=" flex gap-3 justify-between items-center flex-col sm:flex-row">
+        <div
+          class="flex gap-3 justify-between items-center flex-col sm:flex-row"
+        >
           {% if user.is_authenticated %}
           <li class="">
             <a href="{% url 'reader:show_saved' %}">
@@ -56,20 +69,29 @@
           </li>
 
           <li id="publisher-access" class="hidden">
-            <a href="{% url 'publisher:create_book' %}" class="transition-colors hover:text-sky-500">
+            <a
+              href="{% url 'publisher:create_book' %}"
+              class="transition-colors hover:text-sky-500"
+            >
               Create book
-              </a>
-            </li>
+            </a>
+          </li>
 
           <li class="">
-          <a href="{% url 'Logout' %}" class="transition-colors hover:text-sky-500">
-            <i class="fa-solid fa-arrow-right-from-bracket mr-1"></i>
-            Logout
-          </a>
-        </li>
-        
+            <a
+              href="{% url 'Logout' %}"
+              class="transition-colors hover:text-sky-500"
+            >
+              <i class="fa-solid fa-arrow-right-from-bracket mr-1"></i>
+              Logout
+            </a>
+          </li>
+
           {% else %}
-          <a href="{% url 'Login' %}" class="transition-colors hover:text-sky-500">
+          <a
+            href="{% url 'Login' %}"
+            class="transition-colors hover:text-sky-500"
+          >
             <i class="fa-solid fa-arrow-right-to-bracket mr-1"></i>
             Login
           </a>
@@ -78,13 +100,15 @@
         <button class="md:hidden" id="closeNavBtn">
           <i class="fa-solid fa-times text-3xl"></i>
         </button>
-        <div class="pb-20 md:hidden"/>
+        <div class="pb-20 md:hidden" />
       </ul>
       <button class="md:hidden" id="openNavBtn">
         <i class="fa-solid fa-bars text-2xl"></i>
       </button>
     </nav>
-    <div id="app" class="w-full min-h-screen overflow-y-auto bg-zinc-100">{% block content %} {% endblock content %}</div>
+    <div id="app" class="w-full min-h-screen overflow-y-auto bg-zinc-100">
+      {% block content %} {% endblock content %}
+    </div>
     <script>
       const navlinks = document.getElementById("navlinks");
       let isOpen = false;
@@ -93,31 +117,34 @@
       var isPublisher = false;
 
       openNavBtn.addEventListener("click", () => {
-          navlinks.classList.add("left-0");
-          navlinks.classList.remove("-left-full");
+        navlinks.classList.add("left-0");
+        navlinks.classList.remove("-left-full");
       });
 
       closeNavBtn.addEventListener("click", () => {
         navlinks.classList.add("-left-full");
         navlinks.classList.remove("left-0");
-    });
+      });
 
-    async function check_status() {
-      const response = await fetch("{% url 'publisher:check_is_publisher' %}");
-      const data = await response.json();
-      console.log(data);
-      if (data.status !== "publisher") {
-        document.getElementById("publisher-access").remove();
-      } else {
-        isPublisher = true;
-        document.getElementById("publisher-access").classList.remove("hidden");
+      async function check_status() {
+        const response = await fetch(
+          "{% url 'publisher:check_is_publisher' %}"
+        );
+        const data = await response.json();
+        // console.log(data);
+        if (!data.is_publisher) {
+          document.getElementById("publisher-access").remove();
+        } else {
+          isPublisher = true;
+          document
+            .getElementById("publisher-access")
+            .classList.remove("hidden");
+        }
       }
-    }
-    
-    window.addEventListener("load", () => {
-      check_status();
-    })
 
+      window.addEventListener("load", () => {
+        check_status();
+      });
     </script>
     {% block scripts %} {% endblock scripts %}
   </body>

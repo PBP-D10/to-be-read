@@ -16,6 +16,8 @@ import environ
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
+environ.Env.read_env()
+
 env = environ.Env()
 
 # Quick-start development settings - unsuitable for production
@@ -27,7 +29,13 @@ SECRET_KEY = 'django-insecure-4silik)13u%e^p=_7&qsnzxq6bqd8mk86+&-m*sk2p^m)s0rk2
 # SECURITY WARNING: don't run with debug turned on in production!
 PRODUCTION = env.bool('PRODUCTION', False)
 
-CSRF_TRUSTED_ORIGINS = ["https://*.fly.dev"]  
+CSRF_TRUSTED_ORIGINS = ["https://*.railway.app"]
+CORS_ALLOW_ALL_ORIGINS = True
+CORS_ALLOW_CREDENTIALS = True
+CSRF_COOKIE_SECURE = True
+SESSION_COOKIE_SECURE = True
+CSRF_COOKIE_SAMESITE = 'None'
+SESSION_COOKIE_SAMESITE = 'None'
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -48,6 +56,7 @@ INSTALLED_APPS = [
     'reader',
     'publisher',
     'api',
+    'review',
 ]
 
 MIDDLEWARE = [
@@ -101,7 +110,7 @@ if PRODUCTION:
         'default': env.db('DATABASE_URL')
     }
     DATABASES["default"]["ATOMIC_REQUESTS"] = True
-    
+
 # Password validation
 # https://docs.djangoproject.com/en/4.2/ref/settings/#auth-password-validators
 
@@ -140,7 +149,7 @@ STATIC_URL = 'static/'
 
 STATIC_ROOT = BASE_DIR / 'staticfiles'
 
-STATICFILES_DIRS = [ BASE_DIR / 'static']
+STATICFILES_DIRS = [BASE_DIR / 'static']
 
 STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
 # Default primary key field type
