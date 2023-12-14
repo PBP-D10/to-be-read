@@ -1,3 +1,4 @@
+import json
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponseNotFound, HttpResponse
@@ -52,7 +53,7 @@ def get_profile_json(request):
 
 def get_savedBook_json(request):
     savedBook = SavedBook.objects.filter(owner=request.user)
-    return HttpResponse(serializers.serialize('json', savedBook))
+    return HttpResponse(serializers.serialize('json', savedBook), content_type="application/json")
 
 @csrf_exempt
 def edit_profile_ajax(request):
@@ -106,4 +107,20 @@ def create_quote(request):
 
 def get_quote_json(request):
     quote = Quote.objects.all()
-    return HttpResponse(serializers.serialize('json', quote))
+    return HttpResponse(serializers.serialize('json', quote), content_type="application/json")
+
+@csrf_exempt
+def create_quote_flutter(request):
+    if request.method == 'POST':
+        
+        data = json.loads(request.body)
+
+        new_quote = Quote.objects.create(
+            text = data["text"],
+        )
+
+        new_quote.save()
+
+        return JsonResponse({"status": "success"}, status=200)
+    else:
+        return JsonResponse({"status": "error"}, status=401)
