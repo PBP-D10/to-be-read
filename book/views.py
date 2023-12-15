@@ -18,7 +18,6 @@ def home_page(request):
 
 @csrf_exempt
 def get_books_json(request):
-    print("getting json books")
     if request.method == "POST":
         keyword =  request.POST.get("keyword") or ""
 
