@@ -13,4 +13,5 @@ urlpatterns = [
     path('get_profile_json',views.get_profile_json,name='get_profile_json'),
     path('get_savedBook_json',views.get_savedBook_json,name='get_savedBook_json'),
     path('edit_profile_ajax',views.edit_profile_ajax,name='edit_profile_ajax'),
+    path('like_book_ajax',views.like_book_ajax,name='like_book_ajax'),
 ]

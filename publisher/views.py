@@ -60,5 +60,8 @@ def delete_book(request, id):
         return JsonResponse({"error": str(e)}, status=500)
 
 def check_is_publisher(request):
+    if not request.user.is_authenticated:
+        return JsonResponse({'is_publisher': False})
+        
     publisher = Publisher.objects.filter(user=request.user)
     return JsonResponse({'is_publisher': publisher.exists()})

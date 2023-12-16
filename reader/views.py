@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponseNotFound, HttpResponse
-from book.models import SavedBook, Book
+from book.models import SavedBook, Book, LikedBook
 from django.views.decorators.csrf import csrf_exempt
 from reader.models import Profile, Quote
 from django.shortcuts import render
@@ -107,3 +107,18 @@ def create_quote(request):
 def get_quote_json(request):
     quote = Quote.objects.all()
     return HttpResponse(serializers.serialize('json', quote))
+
+@csrf_exempt
+def like_book_ajax(request):
+    if request.method == 'POST':
+        book_id = request.POST.get("book")
+
+        new_book = LikedBook.objects.get_or_create(owner=request.user, book_id=book_id)
+        
+        if (new_book[1] == False):
+            return HttpResponse(b"ALREADY_EXISTS", status=200)
+        else:
+            new_book[0].save()
+        return HttpResponse(b"CREATED", status=201)
+
+    return HttpResponseNotFound()
