@@ -37,6 +37,12 @@ SECRET_KEY = 'django-insecure-4silik)13u%e^p=_7&qsnzxq6bqd8mk86+&-m*sk2p^m)s0rk2
 PRODUCTION = env.bool('PRODUCTION', False)
 
 CSRF_TRUSTED_ORIGINS = ["https://*.railway.app"]
+CORS_ALLOW_ALL_ORIGINS = True
+CORS_ALLOW_CREDENTIALS = True
+CSRF_COOKIE_SECURE = True
+SESSION_COOKIE_SECURE = True
+CSRF_COOKIE_SAMESITE = 'None'
+SESSION_COOKIE_SAMESITE = 'None'
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
