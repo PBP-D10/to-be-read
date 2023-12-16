@@ -51,6 +51,7 @@ def get_profile_json(request):
     }
     return JsonResponse(profile_data)
 
+@csrf_exempt
 def get_savedBook_json(request):
     savedBook = SavedBook.objects.filter(owner=request.user)
     return HttpResponse(serializers.serialize('json', savedBook), content_type="application/json")
@@ -120,6 +121,40 @@ def create_quote_flutter(request):
         )
 
         new_quote.save()
+
+        return JsonResponse({"status": "success"}, status=200)
+    else:
+        return JsonResponse({"status": "error"}, status=401)
+
+def show_json_by_id(request, id):
+    data = Book.objects.filter(pk=id)
+    return HttpResponse(serializers.serialize("json", data), content_type="application/json")
+
+@csrf_exempt
+def create_saved_flutter(request):
+    if request.method == 'POST':
+        
+        data = json.loads(request.body)
+
+        # new_book = SavedBook.objects.get_or_create(owner=request.user, book_id=book_id)
+
+        new_saved = SavedBook.objects.get_or_create(
+            owner = request.user,
+            book_id = int(data["book"]["pk"]),
+        )
+
+        if (new_saved[1] == True):
+            new_saved[0].save()
+        # return HttpResponse(b"CREATED", status=201)
+
+        # new_product = Product.objects.create(
+        #     user = request.user,
+        #     name = data["name"],
+        #     price = int(data["price"]),
+        #     description = data["description"]
+        # )
+
+        #new_saved.save()
 
         return JsonResponse({"status": "success"}, status=200)
     else:
