@@ -30,7 +30,7 @@
         
         return await fetch("{% url 'book:get_books_json' %}",{
             method: "POST",
-            body: formData
+            body: JSON.stringify({'keyword': keyword}),
         }).then((res) => res.json())
     }
     async function refresh_books(){

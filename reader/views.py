@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponseNotFound, HttpResponse
-from book.models import SavedBook, Book
+from book.models import SavedBook, Book, LikedBook
 from django.views.decorators.csrf import csrf_exempt
 from reader.models import Profile, Quote
 from django.shortcuts import render
@@ -109,13 +109,28 @@ def get_quote_json(request):
     quote = Quote.objects.all()
     return HttpResponse(serializers.serialize('json', quote))
 
+@csrf_exempt
+def like_book_ajax(request):
+    if request.method == 'POST':
+        book_id = request.POST.get("book")
+
+        new_book = LikedBook.objects.get_or_create(owner=request.user, book_id=book_id)
+        
+        if (new_book[1] == False):
+            return HttpResponse(b"ALREADY_EXISTS", status=200)
+        else:
+            new_book[0].save()
+        return HttpResponse(b"CREATED", status=201)
+
+    return HttpResponseNotFound()
 
 @csrf_exempt
 def edit_profile_flutter(request):
     profile = Profile.objects.get(user=request.user)
-    data = json.loads(request.body)
-
+    
     if request.method == 'POST':
+        data = json.loads(request.body)
+        
         name = data['name']
         email = data['email']
         address = data['address']
@@ -131,7 +146,7 @@ def edit_profile_flutter(request):
         else:
             profile.address = address
 
-        if date_of_birth == '':
+        if date_of_birth == '' or date_of_birth == "null":
             profile.date_of_birth = None
         else:
             profile.date_of_birth = date_of_birth
@@ -146,7 +161,7 @@ def get_profile_json_flutter(request):
     profile = Profile.objects.get(user=request.user)
     return HttpResponse(serializers.serialize("json", [profile]), content_type="application/json")
 
-def get_savedBook_json_flutter(request):
+def get_saved_books_json_flutter(request):
     savedBooks = SavedBook.objects.filter(owner=request.user)
     return HttpResponse(serializers.serialize("json", savedBooks), content_type="application/json")
 
