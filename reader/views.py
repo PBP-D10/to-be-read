@@ -113,6 +113,9 @@ def like_book_ajax(request):
     if request.method == 'POST':
         book_id = request.POST.get("book")
 
+        print('user: ', request.user)
+        print('book_id: ', book_id)
+
         new_book = LikedBook.objects.get_or_create(owner=request.user, book_id=book_id)
         
         if (new_book[1] == False):
