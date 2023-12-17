@@ -164,14 +164,20 @@ def create_saved_flutter(request):
 @csrf_exempt
 def like_book_ajax(request):
     if request.method == 'POST':
-        book_id = request.POST.get("book")
+
+        data = json.loads(request.body)
+        book_id = data.get("book","")
+
+        print('user: ', request.user)
+        print('book_id: ', book_id)
 
         new_book = LikedBook.objects.get_or_create(owner=request.user, book_id=book_id)
         
         if (new_book[1] == False):
-            return HttpResponse(b"ALREADY_EXISTS", status=200)
+            return JsonResponse({"status": "ALREADY_EXISTS"}, status=200)
         else:
             new_book[0].save()
-        return HttpResponse(b"CREATED", status=201)
+            
+        return JsonResponse({"status": "created"}, status=200)
 
-    return HttpResponseNotFound()
+    return JsonResponse({"status": "not a post"}, status=200)

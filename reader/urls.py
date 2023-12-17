@@ -18,5 +18,5 @@ urlpatterns = [
     path('book_by_id/<int:id>/', views.show_json_by_id, name='book_by_id/'),
     path('create-saved-flutter/', views.create_saved_flutter, name='create-saved-flutter/'),
 
-    path('like_book_ajax',views.like_book_ajax,name='like_book_ajax'),
+    path('like_book_ajax/',views.like_book_ajax,name='like_book_ajax'),
 ]
