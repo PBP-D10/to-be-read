@@ -16,7 +16,7 @@ urlpatterns = [
 
     path('create-quote-flutter/', views.create_quote_flutter, name='create_quote_flutter'),
     path('book_by_id/<int:id>/', views.show_json_by_id, name='book_by_id/'),
-    path('create-saved-flutter/', views.create_saved_flutter, name='create-saved-flutter/')
+    path('create-saved-flutter/', views.create_saved_flutter, name='create-saved-flutter/'),
 
     path('like_book_ajax',views.like_book_ajax,name='like_book_ajax'),
 ]
