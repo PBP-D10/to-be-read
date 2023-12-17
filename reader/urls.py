@@ -13,4 +13,7 @@ urlpatterns = [
     path('get_profile_json',views.get_profile_json,name='get_profile_json'),
     path('get_savedBook_json',views.get_savedBook_json,name='get_savedBook_json'),
     path('edit_profile_ajax',views.edit_profile_ajax,name='edit_profile_ajax'),
+    path('get_profile_json_flutter',views.get_profile_json_flutter,name='get_profile_json_flutter'),
+    path('get_savedBook_json_flutter',views.get_savedBook_json_flutter,name='get_savedBook_json'),
+    path('get_all_profile_json',views.get_all_profile_json,name='get_all_profile_json'),
 ]
