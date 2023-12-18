@@ -1,7 +1,8 @@
+import json
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponseNotFound, HttpResponse
-from book.models import SavedBook, Book
+from book.models import SavedBook, Book, LikedBook
 from django.views.decorators.csrf import csrf_exempt
 from reader.models import Profile, Quote
 from django.shortcuts import render
@@ -50,9 +51,10 @@ def get_profile_json(request):
     }
     return JsonResponse(profile_data)
 
+@csrf_exempt
 def get_savedBook_json(request):
     savedBook = SavedBook.objects.filter(owner=request.user)
-    return HttpResponse(serializers.serialize('json', savedBook))
+    return HttpResponse(serializers.serialize('json', savedBook), content_type="application/json")
 
 @csrf_exempt
 def edit_profile_ajax(request):
@@ -106,4 +108,76 @@ def create_quote(request):
 
 def get_quote_json(request):
     quote = Quote.objects.all()
+    return HttpResponse(serializers.serialize('json', quote), content_type="application/json")
+
+@csrf_exempt
+def create_quote_flutter(request):
+    if request.method == 'POST':
+        
+        data = json.loads(request.body)
+
+        new_quote = Quote.objects.create(
+            text = data["text"],
+        )
+
+        new_quote.save()
+
+        return JsonResponse({"status": "success"}, status=200)
+    else:
+        return JsonResponse({"status": "error"}, status=401)
+
+def show_json_by_id(request, id):
+    data = Book.objects.filter(pk=id)
+    return HttpResponse(serializers.serialize("json", data), content_type="application/json")
+
+@csrf_exempt
+def create_saved_flutter(request):
+    if request.method == 'POST':
+        
+        data = json.loads(request.body)
+
+        # new_book = SavedBook.objects.get_or_create(owner=request.user, book_id=book_id)
+
+        new_saved = SavedBook.objects.get_or_create(
+            owner = request.user,
+            book_id = int(data["book"]["pk"]),
+        )
+
+        if (new_saved[1] == True):
+            new_saved[0].save()
+        # return HttpResponse(b"CREATED", status=201)
+
+        # new_product = Product.objects.create(
+        #     user = request.user,
+        #     name = data["name"],
+        #     price = int(data["price"]),
+        #     description = data["description"]
+        # )
+
+        #new_saved.save()
+
+        return JsonResponse({"status": "success"}, status=200)
+    else:
+        return JsonResponse({"status": "error"}, status=401)
     return HttpResponse(serializers.serialize('json', quote))
+
+@csrf_exempt
+def like_book_ajax(request):
+    if request.method == 'POST':
+
+        data = json.loads(request.body)
+        book_id = data.get("book","")
+
+        print('user: ', request.user)
+        print('book_id: ', book_id)
+
+        new_book = LikedBook.objects.get_or_create(owner=request.user, book_id=book_id)
+        
+        if (new_book[1] == False):
+            return JsonResponse({"status": "ALREADY_EXISTS"}, status=200)
+        else:
+            new_book[0].save()
+            
+        return JsonResponse({"status": "created"}, status=200)
+
+    return JsonResponse({"status": "not a post"}, status=200)
