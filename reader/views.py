@@ -10,6 +10,7 @@ from django.urls import reverse
 from django.http import HttpResponseRedirect
 from django.http import JsonResponse
 from django.core import serializers
+import json
 
 # Create your views here.
 @login_required(login_url='login')
@@ -179,5 +180,49 @@ def like_book_ajax(request):
             new_book[0].save()
             
         return JsonResponse({"status": "created"}, status=200)
+     return JsonResponse({"status": "not a post"}, status=200)
 
-    return JsonResponse({"status": "not a post"}, status=200)
+@csrf_exempt
+def edit_profile_flutter(request):
+    profile = Profile.objects.get(user=request.user)
+    
+    if request.method == 'POST':
+        data = json.loads(request.body)
+        
+        name = data['name']
+        email = data['email']
+        address = data['address']
+        date_of_birth = data['date_of_birth']
+
+        if name != profile.name:
+            profile.name = name
+        if email != profile.email:
+            profile.email = email
+            
+        if address == '' or address == '-':
+            profile.address = None
+        else:
+            profile.address = address
+
+        if date_of_birth == '' or date_of_birth == "null":
+            profile.date_of_birth = None
+        else:
+            profile.date_of_birth = date_of_birth
+
+        profile.save()
+
+        return JsonResponse({"status": "success"}, status=200)
+
+    return JsonResponse({"status": "error"}, status=401)
+
+def get_profile_json_flutter(request):
+    profile = Profile.objects.get(user=request.user)
+    return HttpResponse(serializers.serialize("json", [profile]), content_type="application/json")
+
+def get_saved_books_json_flutter(request):
+    savedBooks = SavedBook.objects.filter(owner=request.user)
+    return HttpResponse(serializers.serialize("json", savedBooks), content_type="application/json")
+
+def get_all_profile_json(request):
+    profile = Profile.objects.all()
+    return HttpResponse(serializers.serialize('json', profile))
