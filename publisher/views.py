@@ -1,3 +1,4 @@
+import json
 from django.shortcuts import render, redirect
 from book.models import Book
 from .forms import BookForm
@@ -29,4 +30,26 @@ def delete_book(request, id):
         print("Exception message:", str(e))
         return JsonResponse({"error": str(e)}, status=500)
 
+@csrf_exempt
+def create_book_flutter(request):
+    if request.method == 'POST':
+        
+        data = json.loads(request.body)
 
+        new_book = Book.objects.create(
+            user = request.user,
+            ISBN = data["fields"]["ISBN"],
+            title = data["fields"]["title"],
+            author = data["fields"]["author"],
+            year = int(data["fields"]["year"]),
+            pubslisher = data["fields"]["publisher"],
+            image_s = data["fields"]["image_s"],
+            image_m = data["fields"]["image_m"],
+            image_l = data["fields"]["image_l"],
+        )
+
+        new_book.save()
+
+        return JsonResponse({"status": "success"}, status=200)
+    else:
+        return JsonResponse({"status": "error"}, status=401)
