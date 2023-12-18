@@ -21,8 +21,9 @@ urlpatterns = [
     path('edit_profile_flutter',views.edit_profile_flutter,name='edit_profile_flutter'),
 
     path('create-quote-flutter/', views.create_quote_flutter, name='create_quote_flutter'),
+    path('book_by_id/<int:id>/', views.show_json_by_id, name='book_by_id'),
+    path('create-saved-flutter/', views.create_saved_flutter, name='create-saved-flutter'),
+    path('remove-saved-flutter/', views.remove_saved_flutter, name='remove-saved-flutter'),
     path('book_by_id/<int:id>/', views.show_json_by_id, name='book_by_id/'),
     path('create-saved-flutter/', views.create_saved_flutter, name='create-saved-flutter/'),
-
-
 ]

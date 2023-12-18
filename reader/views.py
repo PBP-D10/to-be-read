@@ -150,30 +150,33 @@ def create_saved_flutter(request):
 
         data = json.loads(request.body)
 
-        # new_book = SavedBook.objects.get_or_create(owner=request.user, book_id=book_id)
-
         new_saved = SavedBook.objects.get_or_create(
             owner=request.user,
             book_id=int(data["book"]["pk"]),
         )
 
-        if (new_saved[1] == True):
-            new_saved[0].save()
-        # return HttpResponse(b"CREATED", status=201)
-
-        # new_product = Product.objects.create(
-        #     user = request.user,
-        #     name = data["name"],
-        #     price = int(data["price"]),
-        #     description = data["description"]
-        # )
-
-        # new_saved.save()
-
+        if (new_saved[1] == False):
+            return JsonResponse({"status": "already exist"}, status=200)
+        
+        new_saved[0].save()
         return JsonResponse({"status": "success"}, status=200)
+    
     else:
         return JsonResponse({"status": "error"}, status=401)
-    return HttpResponse(serializers.serialize('json', quote))
+    
+@csrf_exempt
+def remove_saved_flutter(request):
+    if request.method == 'POST':
+
+        data = json.loads(request.body)
+        deleted_saved = SavedBook.objects.get(
+            owner = request.user,
+            book_id = int(data["book"]["pk"]),)
+        deleted_saved.delete()
+
+        return JsonResponse({"status": "success"}, status=200)
+
+    return JsonResponse({"status": "error"}, status=401)
 
 
 @csrf_exempt
