@@ -1,3 +1,4 @@
+import json
 from .models import PublisherHouse
 from book.models import Book
 from .forms import BookForm
@@ -65,3 +66,27 @@ def check_is_publisher(request):
         
     publisher = Publisher.objects.filter(user=request.user)
     return JsonResponse({'is_publisher': publisher.exists()})
+
+@csrf_exempt
+def create_book_flutter(request):
+    if request.method == 'POST':
+        
+        data = json.loads(request.body)
+
+        new_book = Book.objects.create(
+            # user = request.user,
+            ISBN = data["ISBN"],
+            title = data["title"],
+            author = data["author"],
+            year = int(data["year"]),
+            publisher = data["publisher"],
+            image_s = data["image_s"],
+            image_m = data["image_m"],
+            image_l = data["image_l"],
+        )
+
+        new_book.save()
+
+        return JsonResponse({"status": "success"}, status=200)
+    else:
+        return JsonResponse({"status": "error"}, status=401)
