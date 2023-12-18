@@ -75,14 +75,14 @@ def create_book_flutter(request):
 
         new_book = Book.objects.create(
             user = request.user,
-            ISBN = data["ISBN"],
-            title = data["title"],
-            author = data["author"],
-            year = int(data["year"]),
-            pubslisher = data["publisher"],
-            image_s = data["image_s"],
-            image_m = data["image_m"],
-            image_l = data["image_l"],
+            ISBN = data["fields"]["ISBN"],
+            title = data["fields"]["title"],
+            author = data["fields"]["author"],
+            year = int(data["fields"]["year"]),
+            pubslisher = data["fields"]["publisher"],
+            image_s = data["fields"]["image_s"],
+            image_m = data["fields"]["image_m"],
+            image_l = data["fields"]["image_l"],
         )
 
         new_book.save()
