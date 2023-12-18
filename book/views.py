@@ -23,20 +23,13 @@ def get_books_json(request):
     if request.method == "POST":
         data = json.loads(request.body)
         keyword = data.get("keyword","")
-
-       # keyword = request.POST.get('keyword', '')
-
-        # print(request.POST)
-        print("keyword is", keyword)
         if keyword == "":
-            print('tai')
             books = Book.objects.all()
 
         else:
             books = Book.objects.filter(Q(title__contains=keyword)
                                             | Q(author__contains=keyword)
                                             | Q(ISBN__contains=keyword))
-        print('kenapa woi')   
         books = books.order_by('-date_added')
 
         context = {
