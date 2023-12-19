@@ -27,6 +27,7 @@ def edit_book(request, book_id):
     
     if request.method == 'POST':
         form = BookForm(request.POST, instance=book)
+        data = json.loads
         if form.is_valid():
             form.save()
             return redirect('book:Home')
@@ -87,6 +88,40 @@ def create_book_flutter(request):
         )
 
         new_book.save()
+
+        return JsonResponse({"status": "success"}, status=200)
+    else:
+        return JsonResponse({"status": "error"}, status=401)
+
+@csrf_exempt
+def edit_book_flutter(request, book_id):
+    book = get_object_or_404(Book, pk=book_id)
+
+    if request.method == "POST":
+        data = json.loads(request.body)
+
+        # Update the book object with the new data
+        isbn = data['ISBN']
+        title = data['title']
+        author = data['author']
+        year = data['year']
+        publisher= data['publisher']
+        image_s = data['image_s']
+        image_m = data['image_m']
+        image_l = data['image_l']
+
+        book.ISBN = isbn
+        book.title = title
+        book.author = author
+        book.year = year
+        book.publisher = publisher
+        book.image_s = image_s
+        book.image_m = image_m
+        book.image_l = image_l
+
+
+        # Save the updated book object
+        book.save()
 
         return JsonResponse({"status": "success"}, status=200)
     else:
