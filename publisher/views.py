@@ -53,7 +53,7 @@ def delete_book(request, id):
     try:
         book_hapus = Book.objects.get(pk=id)  # mengganti DeleteBook dengan Book
         book_hapus.delete()
-        return redirect('book:Home')
+        return JsonResponse({"success": "Book deleted successfully"}, status=200)
 
     except Exception as e:
         print("Exception type:", type(e))
