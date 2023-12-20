@@ -5,7 +5,7 @@ from django.contrib.auth.models import User
 
 class PublisherHouse(models.Model):
     name = models.CharField(max_length=255)
-    year_established = models.IntegerField(null=True)
+    year_established = models.IntegerField(default=0)
     
     def __str__(self):
         return self.name
